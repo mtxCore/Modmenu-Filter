@@ -1,0 +1,6 @@
+{
+  "title.mod_menu_filter.config": "Mod Menu Filter Settings",
+  "category.mod_menu_filter.general": "General Settings",
+  "option.mod_menu_filter.enabled": "Enable Filter",
+  "option.mod_menu_filter.excluded": "Excluded Mod IDs"
+}

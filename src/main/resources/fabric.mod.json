@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "mod_menu_filter",
+  "version": "${version}",
+  "name": "Mod Menu Filter",
+  "description": "Allows you to easily exclude mods from appearing in Mod Menu!",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/mod_menu_filter/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.mtxCore.mod_menu_filter.client.ModMenuFilterClient"
+    ],
+    "main": [
+      "com.mtxCore.mod_menu_filter.ModMenuFilter"
+    ],
+    "modmenu": [
+        "com.mtxCore.mod_menu_filter.client.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "mod_menu_filter.mixins.json",
+    {
+      "config": "mod_menu_filter.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
