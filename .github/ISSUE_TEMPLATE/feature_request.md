@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe your feature**
-Describe your epic feature here. 
+I would like "..." to be added.
 
 **Is it a minor or major feature?**
-Do you think this would take a lot of time to implement?
+This is a "..." feature.

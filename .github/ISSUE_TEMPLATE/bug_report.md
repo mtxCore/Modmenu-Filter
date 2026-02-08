@@ -18,11 +18,11 @@ How to recreate the bug:
 4. See error
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+Here are some screenshots "..."
 
 **Desktop (please complete the following information):**
- - OS
- - Minecraft Version
+ - OS "..."
+ - Minecraft Version "..."
 
 **Additional context**
-Add any other context about the problem here.
+Also "..."
