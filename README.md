@@ -24,13 +24,22 @@
 
 ---
 
-## Configuration 🛠️
+## Easy Configuration 🔧
 
-The configuration file is simple and easy to edit.
+You can configure this mod through **Mod Menu**. Just find the entry and append Mod IDs to the input field. 
+
+> Tip: If you are unsure of a mod’s ID, most mods display it in the Mod
+> Info section of the unfiltered Mod Menu. You can also find it in the
+> mod’s fabric.mod.json file.
+
+
+## Manual Configuration 🛠️
+If you want to manually edit the mod's configuration, you can:
 
 1. Navigate to your `.minecraft/config` folder.
 2. Open `mod_menu_filter.json`.
 3. Modify the `excludedMods` array and add the mod IDs you wish to hide.
+4. Optionally, change `isFilterEnabled` to false to disable the mod.
 
 Example:
 ```json
@@ -43,12 +52,6 @@ Example:
   "isFilterEnabled": true
 }
 ```
-
-> Tip: If you are unsure of a mod’s ID, most mods display it in the Mod
-> Info section of the unfiltered Mod Menu. You can also find it in the
-> mod’s fabric.mod.json file.
-4.  Optionally, change `isFilterEnabled` to false to disable the mod.
-
 ## License 📜
 This project is licensed under the **MIT License**. Feel free to use it in any modpack!
 
