@@ -27,8 +27,7 @@ public class ConfigCheckMixinPlugin implements IMixinConfigPlugin {
         boolean filterEnabled = ConfigManager.isFilterEnabled();
 
         if (mixinClassName.endsWith("ModMenuFilterMixin")) {
-            // If Legacy4J is there, ModMenu's screen is usually disabled/replaced,
-            // so we skip this mixin to avoid conflicts.
+            // If Legacy4J is there we skip
             if (isLegacyInstalled) return false;
             return filterEnabled;
         }
