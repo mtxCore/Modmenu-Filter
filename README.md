@@ -4,13 +4,13 @@
 
 ![License](https://img.shields.io/github/license/mtxCore/Modmenu-filter?style=flat-square) ![Platform](https://img.shields.io/badge/Platform-Fabric-blue?style=flat-square)
 
-**Mod Menu Filter** is a lightweight utility mod that declutters your mod configuration screen. It allows you to hide specific mods from the Mod Menu list without disabling them, making it easier to manage the configurations you actually need.
+**Mod Menu Filter** is a lightweight utility mod that declutters your mod configuration screen. It allows you to hide specific mods from the Mod Menu list without disabling them.
 
 ---
 
 ## Features ⭐
 
-- **Clean Up Your UI:** Hide APIs, libraries, and other mods from Mod Menu.
+- **Filter Mods:** Hide APIs, libraries, and other mods from Mod Menu.
 - **Legacy4J Support:** Built-in support for both **Mod Menu** and the **Legacy4J** mod menu.
 - **Zero Impact:** Hidden mods remain fully active.
 
