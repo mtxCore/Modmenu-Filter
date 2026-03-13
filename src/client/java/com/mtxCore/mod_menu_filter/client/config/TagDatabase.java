@@ -9,11 +9,6 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Loads the bundled tag database (default_tags.json) and manages
- * tag ↔ mod associations at runtime.  Supports user overrides and
- * custom tags applied on top of the defaults.
- */
 public class TagDatabase {
 
     private static final Map<String, Set<String>> MOD_TO_TAGS = new HashMap<>();
@@ -29,7 +24,7 @@ public class TagDatabase {
     private static void loadDefaults() {
         try (InputStream is = TagDatabase.class.getResourceAsStream("/assets/mod_menu_filter/default_tags.json")) {
             if (is == null) {
-                // Not using a logger to avoid additional dependencies for a client mod.
+                // Probably a broken JAR — the resource is embedded at build time and shouldn't be missing.
                 System.err.println("[ModMenuFilter] Missing default_tags.json resource.");
                 return;
             }
@@ -57,11 +52,8 @@ public class TagDatabase {
         }
     }
 
-    /**
-     * Overwrites tag assignments for specific mods.
-     * We clear old associations first to give users total control over 
-     * how a mod is categorized in their UI.
-     */
+    // Strips the mod from every tag it was in before re-registering with the new list.
+    // This way an override completely replaces the defaults rather than appending.
     public static void applyOverrides(Map<String, List<String>> overrides) {
         if (overrides == null) return;
 
@@ -86,10 +78,6 @@ public class TagDatabase {
         }
     }
 
-    /**
-     * Integrates user-created tags. Custom tags are merged with 
-     * defaults to allow for additive categorization.
-     */
     public static void applyCustomTags(Map<String, ConfigManager.CustomTagData> customTags) {
         if (customTags == null) return;
 

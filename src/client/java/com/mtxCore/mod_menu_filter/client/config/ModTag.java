@@ -3,10 +3,6 @@ package com.mtxCore.mod_menu_filter.client.config;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Represents a colored tag that can be assigned to mods.
- * Predefined tags are registered on class load; custom tags are created on demand.
- */
 public class ModTag {
 
     private static final Map<String, ModTag> REGISTRY = new HashMap<>();
@@ -32,11 +28,8 @@ public class ModTag {
         return tag;
     }
 
-    /**
-     * Retrieves an existing tag by ID or generates a new one.
-     * New tags receive a deterministic color based on their ID hash to ensure 
-     * visual consistency across sessions without requiring explicit config.
-     */
+    // New tags get a color derived from their ID hash so they look distinct out of the box,
+    // even before the user assigns a color in config.
     public static ModTag getOrCreate(String id) {
         return REGISTRY.computeIfAbsent(id, k -> new ModTag(k, capitalize(k), generateColor(k)));
     }
@@ -60,8 +53,6 @@ public class ModTag {
     public int getColor() {
         return color;
     }
-
-    /** Helper for MC Rendering — provides the full AARRGGBB integer. */
     public int getColorWithAlpha() {
         return 0xFF000000 | color;
     }
@@ -87,14 +78,10 @@ public class ModTag {
         return sb.toString();
     }
 
-    /**
-     * Generates a deterministic, visually distinct color from a string hash.
-     * Uses manual HSB to RGB calculation to maintain compatibility across 
-     * OS environments where Java AWT might be restricted or absent.
-     */
+    // Skipping AWT's Color.HSBtoRGB — it pulls in the full AWT stack which explodes on headless servers.
+    // The sat/bri ranges are clamped to keep text readable against the dark badge background.
     private static int generateColor(String id) {
         int hash = id.hashCode();
-        // HSB range adjustments ensure the color is always readable with white text
         float hue = ((hash & 0xFFFF) % 360) / 360.0f;
         float sat = 0.55f + ((hash >> 16) & 0x1F) / 100.0f; 
         float bri = 0.75f + ((hash >> 21) & 0x1F) / 120.0f; 

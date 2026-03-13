@@ -1,8 +1,20 @@
+# Gradle
 .gradle/
-.idea/
 build/
+versions/*/build/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Temporary / local artefacts
 out/
 run/
-*.iml
 *.log
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
 

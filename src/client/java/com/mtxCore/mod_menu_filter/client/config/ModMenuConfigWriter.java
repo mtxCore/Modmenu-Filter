@@ -7,12 +7,6 @@ import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
 
-/**
- * Reads and writes ModMenu's own config file ({@code config/modmenu.json}).
- * <p>
- * Only the {@code hidden_mods} key is modified; every other setting is
- * preserved verbatim so we stay fully compatible with Mod Menu.
- */
 public class ModMenuConfigWriter {
 
     private static final Path MODMENU_CONFIG =
@@ -39,11 +33,8 @@ public class ModMenuConfigWriter {
         }
     }
 
-    /**
-     * Updates the 'hidden_mods' field in ModMenu's config.
-     * We manipulate the JsonObject directly to ensure we don't accidentally 
-     * strip other ModMenu settings when saving our filtered list.
-     */
+    // We read the whole file, patch only hidden_mods, then write it back.
+    // Doing a full object round-trip keeps every other modmenu setting intact.
     public static void writeHiddenMods(Collection<String> hiddenMods) {
         File file = MODMENU_CONFIG.toFile();
         @org.jetbrains.annotations.Nullable JsonObject config = null;

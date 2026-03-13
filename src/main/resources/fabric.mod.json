@@ -3,7 +3,7 @@
   "id": "mod_menu_filter",
   "version": "${version}",
   "name": "Mod Menu Filter",
-  "description": "Tag-based mod filtering, favourites, profiles, and coloured badges — powered by Mod Menu's native hidden_mods.",
+  "description": "Tag-based mod filtering, favourites, profiles, and coloured badges for Mod Menu.",
   "authors": ["mtxCore"],
   "contact": {},
   "license": "MIT",

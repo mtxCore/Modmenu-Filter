@@ -41,7 +41,7 @@ public abstract class ModBadgeLibraryMixin {
                 cir.setReturnValue(newBadges);
             }
         } catch (Exception e) {
-            // Silently ignore
+            // Don't let a broken tag lookup corrupt the badge set; native behaviour remains.
         }
     }
 }

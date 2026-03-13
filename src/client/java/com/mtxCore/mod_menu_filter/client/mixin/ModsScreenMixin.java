@@ -18,12 +18,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.*;
 
 /**
- * Adds tag-filter toggle buttons to Mod Menu's filter panel.
- * <p>
- * Buttons appear in the row(s) below Sort / Libraries when the funnel
- * icon is clicked.  The mod list is pushed down to make room, and the
- * list is restored when the panel is dismissed.  Clicking a tag button
- * toggles that tag; mods not matching ANY active tag are hidden.
+ * Inserts tag-filter buttons between the sort row and the mod list.
+ *
+ * Buttons are packed into rows greedily (widest-that-fits first) to avoid
+ * wasting horizontal space. The mod list's top Y is then pushed down by the
+ * total height of the button panel so nothing overlaps.
+ *
+ * When the filter panel is toggled off, the button rows collapse and the list
+ * snaps back to its default Y, so the layout stays coherent whether the panel
+ * is open or not.
  */
 @Mixin(ModsScreen.class)
 public abstract class ModsScreenMixin extends Screen {
@@ -34,30 +37,26 @@ public abstract class ModsScreenMixin extends Screen {
     @Shadow private ModListWidget modList;
 
     @Unique private final List<Button> modMenuFilter$tagButtons = new ArrayList<>();
-    /** Top Y of the first tag-button row (below the Sort/Libraries row at y=45+20). */
-    @Unique private static final int TAG_ROW_Y     = 68;
-    @Unique private static final int TAG_BTN_H     = 16;
+    @Unique private static final int TAG_ROW_Y          = 68;
+    @Unique private static final int TAG_BTN_H          = 16;
     @Unique private static final int MOD_LIST_Y_DEFAULT = 67;
-    /** Populated during init; used by pushListDown(). */
+    // Y that the mod list was pushed to after laying out tag rows; cached so
+    // we can restore the right value when the screen resizes while expanded.
     @Unique private int modMenuFilter$expandedListY = 92;
 
     protected ModsScreenMixin(Component title) { super(title); }
-
-    // -----------------------------------------------------------------------
-    // init
-    // -----------------------------------------------------------------------
 
     @Inject(method = "init", at = @At("TAIL"), require = 0)
     private void modMenuFilter$addTagButtons(CallbackInfo ci) {
         modMenuFilter$tagButtons.clear();
         ConfigManager.activeTagFilters.clear();
 
-        // Build sorted tag list — Favorites first, rest alphabetical
         List<String> tagIds = new ArrayList<>(TagDatabase.getAllTagIds());
         Collections.sort(tagIds);
         tagIds.add(0, "favorites");
 
-        // Pre-compute labels and widths so we can do look-ahead packing
+        // Measure labels up front so the row-packing loop can do look-ahead
+        // without hitting the text renderer on every candidate.
         List<String>  labels = new ArrayList<>(tagIds.size());
         List<Integer> widths = new ArrayList<>(tagIds.size());
         for (String tagId : tagIds) {
@@ -68,17 +67,15 @@ public abstract class ModsScreenMixin extends Screen {
 
         final int maxX = paneWidth - 2;
 
-        // ---- Row-filling pass ----
-        // For each row, repeatedly scan the remaining unplaced buttons from
-        // left to right and pack every button that still fits — this fills
-        // gaps before starting a new row.
+        // Greedy row-packing: scan all unplaced buttons left-to-right each pass
+        // and take every one that fits. Repeat until all are placed.
         boolean[] placed = new boolean[tagIds.size()];
         int placedCount  = 0;
         int buttonY = TAG_ROW_Y;
         int rowEnd  = TAG_ROW_Y; // will be updated below
 
-        // We need to emit buttons in a stable visual order (top-left → bottom-right),
-        // so collect (index, x, y) triples first, then create widgets.
+        // Collect (index, x, y) positions first, then create widgets in sorted order
+        // so Tab-stop ordering matches left-to-right, top-to-bottom visual layout.
         int[] posX  = new int[tagIds.size()];
         int[] posY  = new int[tagIds.size()];
 
@@ -99,11 +96,10 @@ public abstract class ModsScreenMixin extends Screen {
                 }
             }
             rowEnd = buttonY + TAG_BTN_H;
-            if (!anyOnRow) break; // safety valve — shouldn't happen
+            if (!anyOnRow) break; // shouldn't happen, but guard against infinite loop
             buttonY = rowEnd + 2;
         }
 
-        // Now create + register widgets in original order so Tab-order is sane
         for (int i = 0; i < tagIds.size(); i++) {
             final String fTag = tagIds.get(i);
             final String lbl  = String.valueOf(labels.get(i));
@@ -124,15 +120,10 @@ public abstract class ModsScreenMixin extends Screen {
             modMenuFilter$tagButtons.add(btn);
         }
 
-        // Push mod list below all tag-button rows (4 px breathing room)
         modMenuFilter$expandedListY = rowEnd + 4;
 
         if (filterOptionsShown) modMenuFilter$pushListDown();
     }
-
-    // -----------------------------------------------------------------------
-    // setFilterOptionsShown hook
-    // -----------------------------------------------------------------------
 
     @Inject(method = "setFilterOptionsShown", at = @At("TAIL"), require = 0)
     private void modMenuFilter$onFilterToggle(boolean shown, CallbackInfo ci) {
@@ -143,16 +134,11 @@ public abstract class ModsScreenMixin extends Screen {
         else       modMenuFilter$restoreList();
     }
 
-    // -----------------------------------------------------------------------
-    // Helpers
-    // -----------------------------------------------------------------------
-
     @Unique
     private void modMenuFilter$pushListDown() {
         if (modList == null) return;
         int newTopY  = modMenuFilter$expandedListY;
         int newHeight = this.height - newTopY - 36;
-        // updateSizeAndPosition(width, height, topY)
         modList.updateSizeAndPosition(paneWidth, newHeight, newTopY);
     }
 

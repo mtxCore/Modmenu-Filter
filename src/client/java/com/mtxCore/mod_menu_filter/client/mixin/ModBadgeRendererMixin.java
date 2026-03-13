@@ -18,14 +18,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 /**
- * Replaces Mod Menu's native badge rendering (Client, Library, etc.) with our
- * own tag badges.
+ * Replaces Mod Menu's native badge rendering entirely.
  *
- * We inject into ModBadgeRenderer.draw() because ModListEntry already
- * calculates the correct startX/startY (right after the truncated mod name)
- * and passes them to ModBadgeRenderer's constructor — so we inherit that
- * coordinate math for free, staying version-agnostic across all modmenu
- * releases regardless of how ModListEntry.render() signature changes.
+ * We inject into {@code ModBadgeRenderer.draw()} instead of any variant of
+ * {@code ModListEntry.render()} because the renderer is constructed with the
+ * correct X coordinates before {@code draw()} is called — so we always have
+ * the right position regardless of how many times Mod Menu has reshuffled
+ * its render() signature across versions.
+ *
+ * {@code @Shadow} lifts startX/startY/badgeMax/mod out of the target class so
+ * we can reuse them without duplicating the layout math.
  */
 @Mixin(ModBadgeRenderer.class)
 public class ModBadgeRendererMixin {
@@ -39,7 +41,6 @@ public class ModBadgeRendererMixin {
     private void modMenuFilter$replaceBadges(GuiGraphics drawContext, int mouseX, int mouseY, CallbackInfo ci) {
         if (!ConfigManager.showTagBadges) return;
 
-        // Suppress native badges regardless of whether we have custom tags to show
         ci.cancel();
 
         try {
@@ -54,7 +55,6 @@ public class ModBadgeRendererMixin {
             int badgeX = startX;
             int badgeY = startY;
 
-            // Favourite star
             if (isFavorite) {
                 String star = "\u2605";
                 int starWidth = font.width(star);
@@ -64,14 +64,13 @@ public class ModBadgeRendererMixin {
                 }
             }
 
-            // Tag badges
             for (ModTag tag : tags) {
                 String fullLabel = String.valueOf(tag.getDisplayName());
                 String label = fullLabel;
                 int textW = font.width(label);
                 int totalW = textW + 6;
 
-                // Shorten to 3-char abbreviation if compact mode or not enough space
+                // Truncate to 3 uppercase chars if compact mode is on or horizontal room is tight.
                 if (compact || badgeX + totalW >= badgeMax) {
                     label = String.valueOf(fullLabel.substring(0, Math.min(3, fullLabel.length())).toUpperCase());
                     textW = font.width(label);
@@ -95,7 +94,7 @@ public class ModBadgeRendererMixin {
                 badgeX += totalW + 3;
             }
         } catch (Exception e) {
-            // Silently ignore rendering errors
+            // Don't let a broken tag crash the whole mod list.
         }
     }
 

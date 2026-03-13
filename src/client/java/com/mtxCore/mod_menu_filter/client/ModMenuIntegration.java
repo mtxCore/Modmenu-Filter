@@ -197,10 +197,6 @@ public class ModMenuIntegration implements ModMenuApi {
         }
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  Favorites
-    // ═══════════════════════════════════════════════════════════
-
     private void buildFavoritesCategory(ConfigBuilder builder, ConfigEntryBuilder eb) {
         ConfigCategory cat = builder.getOrCreateCategory(
                 Component.translatable("category.mod_menu_filter.favorites"));
@@ -220,10 +216,6 @@ public class ModMenuIntegration implements ModMenuApi {
                 .setSaveConsumer(v -> ConfigManager.favoriteMods = v)
                 .build());
     }
-
-    // ═══════════════════════════════════════════════════════════
-    //  Profiles
-    // ═══════════════════════════════════════════════════════════
 
     private void buildProfilesCategory(ConfigBuilder builder, ConfigEntryBuilder eb) {
         ConfigCategory cat = builder.getOrCreateCategory(
@@ -252,7 +244,6 @@ public class ModMenuIntegration implements ModMenuApi {
                 })
                 .build());
 
-        // List existing profiles
         for (Map.Entry<String, ConfigManager.ProfileData> entry : ConfigManager.profiles.entrySet()) {
             String name = entry.getKey();
             ConfigManager.ProfileData p = entry.getValue();
@@ -272,15 +263,10 @@ public class ModMenuIntegration implements ModMenuApi {
         }
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  Advanced & Statistics
-    // ═══════════════════════════════════════════════════════════
-
     private void buildAdvancedCategory(ConfigBuilder builder, ConfigEntryBuilder eb) {
         ConfigCategory cat = builder.getOrCreateCategory(
                 Component.translatable("category.mod_menu_filter.advanced"));
 
-        // Overview
         int totalMods  = ConfigManager.getInstalledModIds().size();
         int hiddenCount = ConfigManager.computeAllHiddenMods().size();
         int visible     = totalMods - hiddenCount;
@@ -293,7 +279,6 @@ public class ModMenuIntegration implements ModMenuApi {
                                 + " \u00A77| Visible: \u00A7e" + visible))
                 .build());
 
-        // Per-tag stats
         SubCategoryBuilder tagStats = eb.startSubCategory(
                 Component.literal("\u00A76Tag Breakdown"));
 
@@ -316,7 +301,6 @@ public class ModMenuIntegration implements ModMenuApi {
         }
         cat.addEntry(tagStats.build());
 
-        // Config tips
         cat.addEntry(eb
                 .startTextDescription(
                         Component.translatable("text.mod_menu_filter.tag_override_info")
@@ -329,10 +313,6 @@ public class ModMenuIntegration implements ModMenuApi {
                                 .withStyle(ChatFormatting.GRAY))
                 .build());
     }
-
-    // ═══════════════════════════════════════════════════════════
-    //  Helpers
-    // ═══════════════════════════════════════════════════════════
 
     private static MutableComponent coloredTagLabel(ModTag tag, int count) {
         return Component.literal("")

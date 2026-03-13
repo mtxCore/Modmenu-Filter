@@ -10,21 +10,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Central config for Mod Menu Filter.
- * <p>
- * Our own settings live in {@code config/mod_menu_filter.json}.
- * Hidden-mod data is synced into Mod Menu's native {@code hidden_mods}
- * via {@link ModMenuConfigWriter} so the two never conflict.
- */
 public class ConfigManager {
 
     private static final Path CONFIG_PATH =
             FabricLoader.getInstance().getConfigDir().resolve("mod_menu_filter.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    // Cloth Config captures these fields directly via reference.
-    // Making them public allows for cleaner integration without boilerplate getters/setters.
+    // Cloth Config binds to these by reference, not by value — don't reassign the fields, mutate them.
 
     public static boolean filterEnabled       = true;
     public static boolean syncWithModMenu     = true;
@@ -33,7 +25,7 @@ public class ConfigManager {
     public static boolean dependencyProtection = true;
     public static boolean compactBadges       = false;
 
-    /** Transient – active tag filter toggles (not persisted to disk). */
+    // Not saved to disk — gets reset every time the screen is opened.
     public static final java.util.Set<String> activeTagFilters = new java.util.HashSet<>();
 
     public static List<String> hiddenMods   = new ArrayList<>();
@@ -69,8 +61,7 @@ public class ConfigManager {
             initDefaults();
         }
 
-        // TagDatabase must be refreshed post-load to ensure 
-        // user overrides take precedence over hardcoded defaults.
+        // Load defaults first so overrides have something to layer on top of.
         TagDatabase.load();
         TagDatabase.applyOverrides(tagOverrides);
         TagDatabase.applyCustomTags(customTags);
@@ -105,7 +96,6 @@ public class ConfigManager {
             e.printStackTrace();
         }
 
-        // We push to ModMenu's config on every save for immediate UX feedback.
         if (syncWithModMenu) {
             syncToModMenu();
         }
@@ -120,10 +110,6 @@ public class ConfigManager {
         ModMenuConfigWriter.writeHiddenMods(computeAllHiddenMods());
     }
 
-    /**
-     * Aggregates all hiding criteria into a final ID set for ModMenu.
-     * Hierarchy: Essentials > Favorites > Protection > Patterns/Tags/Explicit
-     */
     public static Set<String> computeAllHiddenMods() {
         if (!filterEnabled) return Collections.emptySet();
 
@@ -143,8 +129,6 @@ public class ConfigManager {
                 String modName = mod.getMetadata().getName();
                 for (String pattern : hidePatterns) {
                     try {
-                        // Pattern matching against both ID and Name ensures broad filter coverage
-                        // for mods with non-obvious IDs.
                         if (modId.matches(pattern) || modName.toLowerCase(Locale.ROOT).matches(pattern.toLowerCase(Locale.ROOT))) {
                             hidden.add(modId);
                         }
@@ -155,8 +139,6 @@ public class ConfigManager {
 
         hidden.removeAll(favoriteMods);
 
-        // Required to prevent breaking mod lists that assume certain dependencies
-        // are always available or displayed.
         if (dependencyProtection) {
             hidden.removeAll(getRequiredDependencies(hidden));
         }
@@ -169,10 +151,8 @@ public class ConfigManager {
         return hidden;
     }
 
-    /**
-     * To prevent "ghost" mod issues, we reveal any hidden mod that is 
-     * a direct dependency of a currently visible mod.
-     */
+    // Walks every visible mod's dependency list and pulls anything we hid back into view.
+    // Without this, Fabric can still load fine but the user sees dependency warnings in the list.
     private static Set<String> getRequiredDependencies(Set<String> candidates) {
         Set<String> keepVisible = new HashSet<>();
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
@@ -185,10 +165,6 @@ public class ConfigManager {
         }
         return keepVisible;
     }
-
-    // ════════════════════════════════════════════════════════════════
-    //  Profile management
-    // ════════════════════════════════════════════════════════════════
 
     public static void saveCurrentAsProfile(String name) {
         ProfileData p = new ProfileData();
@@ -217,10 +193,6 @@ public class ConfigManager {
         save();
     }
 
-    // ════════════════════════════════════════════════════════════════
-    //  Convenience helpers
-    // ════════════════════════════════════════════════════════════════
-
     public static boolean isFilterEnabled() { return filterEnabled; }
 
     public static boolean isModHidden(String modId) {
@@ -239,17 +211,12 @@ public class ConfigManager {
         if (!hiddenMods.remove(modId)) hiddenMods.add(modId);
     }
 
-    /** Sorted list of every installed mod ID. */
     public static List<String> getInstalledModIds() {
         return FabricLoader.getInstance().getAllMods().stream()
                 .map(m -> m.getMetadata().getId())
                 .sorted()
                 .collect(Collectors.toList());
     }
-
-    // ════════════════════════════════════════════════════════════════
-    //  Defaults
-    // ════════════════════════════════════════════════════════════════
 
     private static void initDefaults() {
         filterEnabled       = true;
@@ -287,10 +254,6 @@ public class ConfigManager {
         profiles      = d.profiles      != null ? new HashMap<>(d.profiles)   : new HashMap<>();
     }
 
-    // ════════════════════════════════════════════════════════════════
-    //  Serialisation POJOs
-    // ════════════════════════════════════════════════════════════════
-
     static class ConfigData {
         boolean filterEnabled        = true;
         boolean syncWithModMenu      = true;
@@ -312,7 +275,6 @@ public class ConfigManager {
         Map<String, ProfileData>   profiles;
     }
 
-    /** User-created tag with a colour and an explicit mod list. */
     public static class CustomTagData {
         public int color = 0xFFFFFF;
         public List<String> mods = new ArrayList<>();
@@ -324,7 +286,6 @@ public class ConfigManager {
         }
     }
 
-    /** A named snapshot of filter settings. */
     public static class ProfileData {
         public List<String> hiddenMods       = new ArrayList<>();
         public List<String> hiddenTags       = new ArrayList<>();

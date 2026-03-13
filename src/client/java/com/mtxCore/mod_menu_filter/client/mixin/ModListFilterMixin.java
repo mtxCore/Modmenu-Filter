@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Intercepts {@link ModSearch#search} to additionally filter by active
- * tag buttons BEFORE Mod Menu adds entries to the list.
- * <p>
- * This approach is reliable because we replace the return value of the
- * static search method rather than mutating the children list afterwards.
+ * Filters the mod list by the active tag selection.
+ *
+ * Injecting at RETURN (rather than HEAD) means Mod Menu's own search/sort
+ * logic runs first and produces a fully ordered list — we just trim it down
+ * before it reaches the UI, so sorting and alphabetisation stay correct.
  */
 @Mixin(ModSearch.class)
 public class ModListFilterMixin {
@@ -50,7 +50,8 @@ public class ModListFilterMixin {
             }
             cir.setReturnValue(filtered);
         } catch (Exception e) {
-            // Silently ignore to avoid breaking the mod list
+            // If tag filtering blows up for any reason, return the unfiltered result.
+            // Better a noisy mod list than a completely broken screen.
         }
     }
 }
