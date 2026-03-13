@@ -189,7 +189,7 @@ public class ModMenuIntegration implements ModMenuApi {
                         .count();
                 if (total > 25) sb.append(" \u00A77... and ").append(total - 25).append(" more");
                 sub.add(eb
-                        .startTextDescription(Component.literal(sb.toString()))
+                        .startTextDescription(Component.literal(String.valueOf(sb.toString())))
                         .build());
             }
 
@@ -336,7 +336,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
     private static MutableComponent coloredTagLabel(ModTag tag, int count) {
         return Component.literal("")
-                .append(Component.literal(tag.getDisplayName())
+                .append(Component.literal(String.valueOf(tag.getDisplayName()))
                         .withStyle(Style.EMPTY.withColor(tag.getColorWithAlpha())))
                 .append(Component.literal(" (" + count + " mods)")
                         .withStyle(ChatFormatting.GRAY));

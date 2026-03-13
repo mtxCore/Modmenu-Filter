@@ -123,4 +123,3 @@ public class ModTag {
         return (r << 16) | (g << 8) | b;
     }
 }
-}

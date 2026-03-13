@@ -24,7 +24,7 @@ public class ModMenuConfigWriter {
         if (!file.exists()) return new ArrayList<>();
 
         try (FileReader reader = new FileReader(file)) {
-            JsonObject config = GSON.fromJson(reader, JsonObject.class);
+            @org.jetbrains.annotations.Nullable JsonObject config = GSON.fromJson(reader, JsonObject.class);
             if (config == null || !config.has("hidden_mods")) return new ArrayList<>();
 
             JsonArray arr = config.getAsJsonArray("hidden_mods");
@@ -46,7 +46,7 @@ public class ModMenuConfigWriter {
      */
     public static void writeHiddenMods(Collection<String> hiddenMods) {
         File file = MODMENU_CONFIG.toFile();
-        JsonObject config;
+        @org.jetbrains.annotations.Nullable JsonObject config = null;
 
         if (file.exists()) {
             try (FileReader reader = new FileReader(file)) {

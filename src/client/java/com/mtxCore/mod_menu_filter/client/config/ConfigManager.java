@@ -33,6 +33,9 @@ public class ConfigManager {
     public static boolean dependencyProtection = true;
     public static boolean compactBadges       = false;
 
+    /** Transient – active tag filter toggles (not persisted to disk). */
+    public static final java.util.Set<String> activeTagFilters = new java.util.HashSet<>();
+
     public static List<String> hiddenMods   = new ArrayList<>();
     public static List<String> favoriteMods = new ArrayList<>();
     public static List<String> hiddenTags   = new ArrayList<>();
@@ -54,7 +57,7 @@ public class ConfigManager {
         }
 
         try (FileReader reader = new FileReader(file)) {
-            ConfigData data = GSON.fromJson(reader, ConfigData.class);
+            @org.jetbrains.annotations.Nullable ConfigData data = GSON.fromJson(reader, ConfigData.class);
             if (data != null) {
                 applyFromData(data);
             } else {

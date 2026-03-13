@@ -4,7 +4,10 @@
   "package": "com.mtxCore.mod_menu_filter.client.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ModBadgeMixin"
+    "ModBadgeRendererMixin",
+    "ModBadgeLibraryMixin",
+    "ModListFilterMixin",
+    "ModsScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 0

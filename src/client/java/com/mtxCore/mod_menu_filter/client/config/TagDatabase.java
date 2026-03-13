@@ -124,7 +124,7 @@ public class TagDatabase {
         return tagIds.stream()
                 .map(ModTag::get)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static Set<String> getModsForTag(String tagId) {

@@ -13,9 +13,6 @@
     "client": [
       "com.mtxCore.mod_menu_filter.client.ModMenuFilterClient"
     ],
-    "main": [
-      "com.mtxCore.mod_menu_filter.ModMenuFilter"
-    ],
     "modmenu": [
       "com.mtxCore.mod_menu_filter.client.ModMenuIntegration"
     ]
