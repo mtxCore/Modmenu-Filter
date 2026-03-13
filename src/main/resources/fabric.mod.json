@@ -3,12 +3,12 @@
   "id": "mod_menu_filter",
   "version": "${version}",
   "name": "Mod Menu Filter",
-  "description": "Allows you to easily exclude mods from appearing in Mod Menu!",
-  "authors": [],
+  "description": "Tag-based mod filtering, favourites, profiles, and coloured badges — powered by Mod Menu's native hidden_mods.",
+  "authors": ["mtxCore"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/mod_menu_filter/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.mtxCore.mod_menu_filter.client.ModMenuFilterClient"
@@ -17,11 +17,10 @@
       "com.mtxCore.mod_menu_filter.ModMenuFilter"
     ],
     "modmenu": [
-        "com.mtxCore.mod_menu_filter.client.ModMenuIntegration"
+      "com.mtxCore.mod_menu_filter.client.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "mod_menu_filter.mixins.json",
     {
       "config": "mod_menu_filter.client.mixins.json",
       "environment": "client"
@@ -30,6 +29,8 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "${minecraft_version}",
+    "modmenu": "*",
+    "cloth-config": "*"
   }
 }

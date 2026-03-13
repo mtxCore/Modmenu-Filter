@@ -1,6 +1,44 @@
 {
-  "title.mod_menu_filter.config": "Mod Menu Filter Settings",
-  "category.mod_menu_filter.general": "General Settings",
-  "option.mod_menu_filter.enabled": "Enable Filter",
-  "option.mod_menu_filter.excluded": "Excluded Mod IDs"
+  "title.mod_menu_filter.config": "Mod Menu Filter \u2014 Settings",
+
+  "category.mod_menu_filter.general":   "General",
+  "category.mod_menu_filter.hidden":    "Hidden Mods",
+  "category.mod_menu_filter.tags":      "Tag Filters",
+  "category.mod_menu_filter.favorites": "Favourites",
+  "category.mod_menu_filter.profiles":  "Profiles",
+  "category.mod_menu_filter.advanced":  "Advanced & Stats",
+
+  "option.mod_menu_filter.enabled":        "Enable Filter",
+  "option.mod_menu_filter.sync":           "Sync with Mod Menu",
+  "option.mod_menu_filter.badges":         "Show Tag Badges",
+  "option.mod_menu_filter.auto_hide_libs": "Auto-hide Libraries",
+  "option.mod_menu_filter.dep_protection": "Dependency Protection",
+  "option.mod_menu_filter.compact_badges": "Compact Badges",
+  "option.mod_menu_filter.hidden_mods":    "Hidden Mod IDs",
+  "option.mod_menu_filter.hide_patterns":  "Hide Patterns (Regex)",
+  "option.mod_menu_filter.hide_tag":       "Hide %s (%s mods)",
+  "option.mod_menu_filter.tag_color":      "%s Colour",
+  "option.mod_menu_filter.favorites":      "Favourite Mod IDs",
+  "option.mod_menu_filter.active_profile": "Active Profile",
+
+  "tooltip.mod_menu_filter.enabled":        "Master toggle for all filtering. When disabled every mod is visible.",
+  "tooltip.mod_menu_filter.sync":           "Write hidden mods into Mod Menu's own config for full native compatibility.",
+  "tooltip.mod_menu_filter.badges":         "Display coloured tag badges on mod entries in the mod list.",
+  "tooltip.mod_menu_filter.auto_hide_libs": "Automatically hide all library / API mods from the mod list.",
+  "tooltip.mod_menu_filter.dep_protection": "Prevent hiding mods that are required dependencies of visible mods.",
+  "tooltip.mod_menu_filter.compact_badges": "Show abbreviated 3-letter badges to save space.",
+  "tooltip.mod_menu_filter.hidden_mods":    "Mod IDs to hide. These are written to Mod Menu's hidden_mods list.",
+  "tooltip.mod_menu_filter.hide_patterns":  "Java regex patterns matched against mod IDs and names.",
+  "tooltip.mod_menu_filter.hide_tag":       "Hide all mods tagged as %s from the mod list.",
+  "tooltip.mod_menu_filter.tag_color":      "Customise the badge colour for the %s tag.",
+  "tooltip.mod_menu_filter.favorites":      "Favourite mods are always shown, even when their tag is hidden.",
+  "tooltip.mod_menu_filter.active_profile": "Switch between profiles. Type a new name to create one.",
+
+  "text.mod_menu_filter.hidden_info":        "Add mod IDs below to hide them from Mod Menu. Changes are synced to Mod Menu's own hidden_mods config on save.",
+  "text.mod_menu_filter.tags_info":          "Toggle entire categories on or off. Expand a tag to see its colour and which of your installed mods it covers.",
+  "text.mod_menu_filter.favorites_info":     "Favourite mods override all hiding rules \u2014 they will always be visible in the mod list.",
+  "text.mod_menu_filter.profiles_info":      "Profiles save your current hidden mods, hidden tags, and favourites. Switch profiles to quickly change setups.",
+  "text.mod_menu_filter.tag_override_info":  "Tag assignments are loaded from the built-in database. Override per-mod tags in the JSON config under 'tagOverrides'.",
+  "text.mod_menu_filter.regex_info":         "Regex patterns use Java syntax (e.g. 'fabric-.*' hides all Fabric API sub-modules).",
+  "text.mod_menu_filter.stats":              "Installed: %s | Hidden: %s | Visible: %s"
 }

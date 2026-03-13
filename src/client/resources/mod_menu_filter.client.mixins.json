@@ -4,14 +4,9 @@
   "package": "com.mtxCore.mod_menu_filter.client.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ModMenuFilterMixin",
-    "ModMenuFilterLegacyMixin"
+    "ModBadgeMixin"
   ],
-  "plugin": "com.mtxCore.mod_menu_filter.client.config.ConfigCheckMixinPlugin",
   "injectors": {
-    "defaultRequire": 1
-  },
-  "overwrites": {
-    "requireAnnotations": true
+    "defaultRequire": 0
   }
 }

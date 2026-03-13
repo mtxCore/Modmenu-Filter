@@ -24,19 +24,6 @@ loom {
 
 repositories {
     maven {
-        url "https://jm.gserv.me/repository/maven-public/"
-    }
-    maven {
-        url "https://maven.isxander.dev/releases"
-    }
-    maven {
-        url "https://www.cursemaven.com"
-    }
-    maven {
-        name = 'Kyubion Mod Resources'
-        url "https://raw.githubusercontent.com/Kyubion-Studios/Mod-Resources/main/maven/"
-    }
-    maven {
         url "https://maven.shedaniel.me/"
     }
 
@@ -51,14 +38,11 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
-    maven { url "https://jitpack.io" }
 
     maven {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
-
-    maven{url = "https://maven.su5ed.dev/releases"}
 }
 
 dependencies {
@@ -71,9 +55,6 @@ dependencies {
 
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
     modApi "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
-
-    modCompileOnlyApi "wily.factory_api:factory_api-fabric:1.21.10-${factory_api_version}"
-    modCompileOnly "wily.legacy:legacy-fabric:1.21.10-${legacy_version}"
 }
 
 processResources {
