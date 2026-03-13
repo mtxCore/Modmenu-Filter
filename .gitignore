@@ -18,3 +18,6 @@ run/
 .DS_Store
 Thumbs.db
 
+# Other
+*.out
+build_out.txt
