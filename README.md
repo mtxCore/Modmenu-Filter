@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H51ZR38L)
+
 # Mod Menu Filter
 
 <img src="https://github.com/user-attachments/assets/a8c27a83-ca11-4292-bd32-5eebddcd087b" alt="logo" width="64" height="64"/>
